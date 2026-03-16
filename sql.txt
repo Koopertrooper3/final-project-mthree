@@ -1,0 +1,18 @@
+USER
+username
+password
+FK relation to grocery lists table (one-to-many)
+FK pantry (one-to-one)
+
+GROCERY list
+PK id
+array of {ingredients, quantity}
+
+pantry
+PK id
+array of {ingredients, quantity}
+
+Ingredients 
+pk id
+string ingreident
+category Strings[] - no uppercase letters, sanitize before input

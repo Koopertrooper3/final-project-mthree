@@ -1,0 +1,21 @@
+TODO:
+Login routes
+Register routes
+
+Add ingredient
+Delete ingredient
+
+Add grocery lists
+Delete grocery lists
+Modify grocery lists
+
+Add grocery list items to pantry
+Remove items from pantry
+Modify quantity of ingredients in pantry
+
+
+
+/route -
+json requestbody -
+json return body - 
+
