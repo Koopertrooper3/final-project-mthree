@@ -1,0 +1,657 @@
+GROCERY LIST HELPER - BACKEND API NOTES
+
+Base URL:
+http://localhost:8080
+
+General notes:
+- IDs used in URLs must already exist in the database.
+- Date format for pantry expiryDate must be:
+  YYYY-MM-DD
+  Example: 2026-08-01
+- Change root password--default is set to "root"
+
+
+TLDR (endpoint list):
+
+--------------------------------------------------
+
+1. Auth
+
+POST /api/auth/register
+
+POST /api/auth/login
+
+--------------------------------------------------
+
+2. Shopping Lists
+
+POST /api/lists
+
+GET /api/lists/user/{userId}
+
+PUT /api/lists/{listId}
+
+DELETE /api/lists/{listId}
+
+--------------------------------------------------
+
+3. Shopping Items
+
+POST /api/items
+
+GET /api/items/list/{listId}
+
+PUT /api/items/{itemId}
+
+PATCH /api/items/{itemId}/bought
+
+DELETE /api/items/{itemId}
+
+--------------------------------------------------
+
+4. Pantry
+
+POST /api/pantry
+
+GET /api/pantry/user/{userId}
+
+PUT /api/pantry/{pantryItemId}
+
+DELETE /api/pantry/{pantryItemId}
+
+--------------------------------------------------
+
+5. Ingredients
+
+POST /api/ingredients
+
+GET /api/ingredients
+
+POST /api/ingredients/link
+
+GET /api/ingredients/list/{listId}
+
+DELETE /api/ingredients/link/{listIngredientId}
+
+
+==================================================
+1. AUTH
+==================================================
+
+A. Register User
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/auth/register
+
+Purpose:
+Creates a new user account.
+
+Request body example:
+{
+  "name": "Christian",
+  "email": "christian@email.com",
+  "password": "1234"
+}
+
+Expected success response:
+User registered successfully
+
+Possible other responses:
+- Email already exists
+
+Notes:
+- Email must be unique.
+- If the same email is sent again, registration will fail.
+
+--------------------------------------------------
+
+B. Login User
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/auth/login
+
+Purpose:
+Checks whether the user exists and whether the password matches.
+
+Request body example:
+{
+  "email": "christian@email.com",
+  "password": "1234"
+}
+
+Expected success response:
+Login successful
+
+Possible other responses:
+- User not found
+- Invalid password
+
+==================================================
+2. SHOPPING LISTS
+==================================================
+
+A. Create Shopping List
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/lists
+
+Purpose:
+Creates a new shopping list for a specific user.
+
+Request body example:
+{
+  "title": "My Weekly Groceries",
+  "userId": 3
+}
+
+Expected success response:
+Shopping list created successfully
+
+Possible other responses:
+- User not found
+- List title cannot be empty
+
+Notes:
+- userId must be an existing user in the users table.
+
+--------------------------------------------------
+
+B. Get Shopping Lists By User
+Method:
+GET
+
+Endpoint format:
+http://localhost:8080/api/lists/user/{userId}
+
+Example:
+http://localhost:8080/api/lists/user/3
+
+Purpose:
+Returns all shopping lists for a specific user.
+
+Expected response example:
+[
+  {
+    "id": 1,
+    "title": "Weekly Groceries",
+    "createdAt": "2026-03-18T11:38:52",
+    "user": {
+      "id": 3,
+      "name": "Christian",
+      "email": "christian@email.com",
+      "createdAt": "2026-03-19T00:00:00"
+    }
+  }
+]
+
+Notes:
+- This returns a JSON array.
+- If the user has no lists, it may return an empty array.
+
+--------------------------------------------------
+
+C. Update Shopping List
+Method:
+PUT
+
+Endpoint format:
+http://localhost:8080/api/lists/{listId}
+
+Example:
+http://localhost:8080/api/lists/4
+
+Purpose:
+Updates the title of an existing shopping list.
+
+Request body example:
+{
+  "title": "Updated Grocery List"
+}
+
+Expected success response:
+Shopping list updated successfully
+
+Possible other responses:
+- Shopping list not found
+- List title cannot be empty
+
+--------------------------------------------------
+
+D. Delete Shopping List
+Method:
+DELETE
+
+Endpoint format:
+http://localhost:8080/api/lists/{listId}
+
+Example:
+http://localhost:8080/api/lists/4
+
+Purpose:
+Deletes an existing shopping list.
+
+Expected success response:
+Shopping list deleted successfully
+
+Possible other responses:
+- Shopping list not found
+
+==================================================
+3. SHOPPING ITEMS
+==================================================
+
+A. Create Shopping Item
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/items
+
+Purpose:
+Adds a shopping item to a specific shopping list.
+
+Request body example:
+{
+  "itemName": "Bananas",
+  "quantity": 6,
+  "category": "Fruit",
+  "listId": 1
+}
+
+Expected success response:
+Shopping item created successfully
+
+Possible other responses:
+- Shopping list not found
+- Item name cannot be empty
+- Quantity must be greater than 0
+
+Notes:
+- listId must already exist in shopping_lists.
+
+--------------------------------------------------
+
+B. Get Shopping Items By List
+Method:
+GET
+
+Endpoint format:
+http://localhost:8080/api/items/list/{listId}
+
+Example:
+http://localhost:8080/api/items/list/1
+
+Purpose:
+Returns all shopping items belonging to a shopping list.
+
+Expected response example:
+[
+  {
+    "bought": false,
+    "category": "Bakery",
+    "createdAt": "2026-03-18T11:38:52",
+    "id": 2,
+    "itemName": "Bread",
+    "quantity": 1
+  },
+  {
+    "bought": true,
+    "category": "Drinks",
+    "createdAt": "2026-03-18T11:38:52",
+    "id": 3,
+    "itemName": "Orange Juice",
+    "quantity": 2
+  }
+]
+
+Notes:
+- This returns a JSON array.
+- bought is true or false.
+
+--------------------------------------------------
+
+C. Update Shopping Item
+Method:
+PUT
+
+Endpoint format:
+http://localhost:8080/api/items/{itemId}
+
+Example:
+http://localhost:8080/api/items/7
+
+Purpose:
+Updates item name, quantity, and category.
+
+Request body example:
+{
+  "itemName": "Bananas",
+  "quantity": 10,
+  "category": "Fruit"
+}
+
+Expected success response:
+Shopping item updated successfully
+
+Possible other responses:
+- Shopping item not found
+- Item name cannot be empty
+- Quantity must be greater than 0
+
+--------------------------------------------------
+
+D. Update Bought Status
+Method:
+PATCH
+
+Endpoint format:
+http://localhost:8080/api/items/{itemId}/bought
+
+Example:
+http://localhost:8080/api/items/7/bought
+
+Purpose:
+Changes whether an item is marked as bought or not.
+
+Request body example:
+{
+  "bought": true
+}
+
+Expected success response:
+Shopping item bought status updated successfully
+
+Possible other responses:
+- Shopping item not found
+
+--------------------------------------------------
+
+E. Delete Shopping Item
+Method:
+DELETE
+
+Endpoint format:
+http://localhost:8080/api/items/{itemId}
+
+Example:
+http://localhost:8080/api/items/7
+
+Purpose:
+Deletes a shopping item.
+
+Expected success response:
+Shopping item deleted successfully
+
+Possible other responses:
+- Shopping item not found
+
+==================================================
+4. PANTRY
+==================================================
+
+A. Create Pantry Item
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/pantry
+
+Purpose:
+Adds an item to the pantry for a specific user.
+
+Request body example:
+{
+  "itemName": "Peanut Butter",
+  "quantity": 1,
+  "category": "Spread",
+  "expiryDate": "2026-08-01",
+  "userId": 3
+}
+
+Expected success response:
+Pantry item created successfully
+
+Possible other responses:
+- User not found
+- Pantry item name cannot be empty
+- Quantity must be greater than 0
+
+Notes:
+- expiryDate is optional, but if included it must be in YYYY-MM-DD format.
+
+--------------------------------------------------
+
+B. Get Pantry Items By User
+Method:
+GET
+
+Endpoint format:
+http://localhost:8080/api/pantry/user/{userId}
+
+Example:
+http://localhost:8080/api/pantry/user/3
+
+Purpose:
+Returns all pantry items for a specific user.
+
+Expected response example:
+[
+  {
+    "id": 5,
+    "itemName": "Peanut Butter",
+    "quantity": 1,
+    "category": "Spread",
+    "expiryDate": "2026-08-01",
+    "createdAt": "2026-03-19T00:00:00"
+  }
+]
+
+Notes:
+- This returns a JSON array.
+
+--------------------------------------------------
+
+C. Update Pantry Item
+Method:
+PUT
+
+Endpoint format:
+http://localhost:8080/api/pantry/{pantryItemId}
+
+Example:
+http://localhost:8080/api/pantry/5
+
+Purpose:
+Updates pantry item fields.
+
+Request body example:
+{
+  "itemName": "Peanut Butter",
+  "quantity": 2,
+  "category": "Spread",
+  "expiryDate": "2026-09-01"
+}
+
+Expected success response:
+Pantry item updated successfully
+
+Possible other responses:
+- Pantry item not found
+- Pantry item name cannot be empty
+- Quantity must be greater than 0
+
+Notes:
+- If expiryDate is blank or omitted during update, it may be set to null depending on request handling.
+
+--------------------------------------------------
+
+D. Delete Pantry Item
+Method:
+DELETE
+
+Endpoint format:
+http://localhost:8080/api/pantry/{pantryItemId}
+
+Example:
+http://localhost:8080/api/pantry/5
+
+Purpose:
+Deletes a pantry item.
+
+Expected success response:
+Pantry item deleted successfully
+
+Possible other responses:
+- Pantry item not found
+
+==================================================
+5. INGREDIENTS
+==================================================
+
+A. Create Ingredient
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/ingredients
+
+Purpose:
+Creates a reusable ingredient entry.
+
+Request body example:
+{
+  "name": "Yogurt",
+  "category": "Dairy"
+}
+
+Expected success response:
+Ingredient created successfully
+
+Possible other responses:
+- Ingredient name cannot be empty
+- Ingredient already exists
+
+--------------------------------------------------
+
+B. Get All Ingredients
+Method:
+GET
+
+Endpoint:
+http://localhost:8080/api/ingredients
+
+Purpose:
+Returns all ingredients in the database.
+
+Expected response example:
+[
+  {
+    "id": 2,
+    "name": "Eggs",
+    "category": "Protein"
+  },
+  {
+    "id": 7,
+    "name": "Yogurt",
+    "category": "Dairy"
+  }
+]
+
+--------------------------------------------------
+
+C. Link Ingredient To Shopping List
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/ingredients/link
+
+Purpose:
+Links an ingredient to a shopping list through the list_ingredients table.
+
+Request body example:
+{
+  "listId": 1,
+  "ingredientId": 7,
+  "quantity": 2
+}
+
+Expected success response:
+Ingredient added to shopping list successfully
+
+Possible other responses:
+- Shopping list not found
+- Ingredient not found
+- Quantity must be greater than 0
+
+Notes:
+- listId must exist in shopping_lists.
+- ingredientId must exist in ingredients.
+
+--------------------------------------------------
+
+D. Get Ingredients By Shopping List
+Method:
+GET
+
+Endpoint format:
+http://localhost:8080/api/ingredients/list/{listId}
+
+Example:
+http://localhost:8080/api/ingredients/list/1
+
+Purpose:
+Returns all ingredient links for one shopping list.
+
+Expected response example:
+[
+  {
+    "id": 2,
+    "ingredient": {
+      "category": "Protein",
+      "id": 2,
+      "name": "Eggs"
+    },
+    "quantity": 12
+  },
+  {
+    "id": 7,
+    "ingredient": {
+      "category": "Dairy",
+      "id": 7,
+      "name": "Yogurt"
+    },
+    "quantity": 2
+  }
+]
+
+Notes:
+- id in this response is the list_ingredients row id, not the ingredient id.
+- ingredient.id is the actual ingredient id.
+
+--------------------------------------------------
+
+E. Remove Ingredient From Shopping List
+Method:
+DELETE
+
+Endpoint format:
+http://localhost:8080/api/ingredients/link/{listIngredientId}
+
+Example:
+http://localhost:8080/api/ingredients/link/7
+
+Purpose:
+Deletes the link between a shopping list and an ingredient.
+
+Expected success response:
+Ingredient removed from shopping list successfully
+
+Possible other responses:
+- Linked ingredient not found

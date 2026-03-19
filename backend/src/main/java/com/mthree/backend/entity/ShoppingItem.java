@@ -1,5 +1,6 @@
 package com.mthree.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -26,6 +27,7 @@ public class ShoppingItem {
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "list_id", nullable = false)
     private ShoppingList shoppingList;

@@ -1,5 +1,6 @@
 package com.mthree.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class ListIngredient {
     @Column(nullable = false)
     private Integer quantity = 1;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "list_id", nullable = false)
     private ShoppingList shoppingList;
