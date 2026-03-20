@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { FormControl,FormGroup,ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService, loginObject } from '../auth.service';
 
@@ -28,7 +28,7 @@ export class LoginPageComponent {
     )
   })
 
-  constructor(private auth : AuthService){}
+  constructor(private auth : AuthService, private router : Router){}
 
   get emailField() {
     return this.loginForm.get('emailControl');
@@ -39,9 +39,6 @@ export class LoginPageComponent {
   }
 
   onSubmit(){
-    console.warn(this.loginForm.value);
-    console.warn(this.loginForm.errors);
-
     let passwordField = this.loginForm.get('passwordControl');
     let emailField = this.loginForm.get('emailControl')
 
@@ -55,6 +52,12 @@ export class LoginPageComponent {
     }
 
     let login : loginObject = {email: emailField.value, password: passwordField.value}
-    this.auth.loginAttempt(login)
+    this.auth.loginAttempt(login).subscribe((res) =>{
+      if(res !== "Login successful"){
+        console.log("Login unsuccessful")
+      }else{
+        this.router.navigateByUrl("/dashboard")
+      }
+    })
   }
 }

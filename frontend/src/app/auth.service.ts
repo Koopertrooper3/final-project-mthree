@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParamsOptions } from '@angular/common/http';
+import { environment } from '../environments/environment';
+const apiUrl = environment.apiUrl
 
 export interface loginObject{
   email: string,
   password: string
+}
+
+export interface registerObject{
+  email: string,
+  password: string,
+  name: string
 }
 
 @Injectable({
@@ -17,10 +25,10 @@ export class AuthService {
 
 
   loginAttempt(login : loginObject){
-    //this.http.post()
+    return this.http.post(environment.apiUrl + "/api/auth/login",login,{responseType: 'text'})
   }
 
-  registerAttempt(){
-    //this.http.post().
+  registerAttempt(register : registerObject){
+    return this.http.post(environment.apiUrl + "/api/auth/register",register,{responseType: 'text'})
   }
 }
