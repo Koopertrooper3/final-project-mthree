@@ -1,0 +1,45 @@
+<div id="main-content" class="d-flex container-fluid justify-content-evenly align-items-center h-100vh login-background">
+
+    <div id="form-container" class="d-flex flex-column border border-3 bg-white p-5 w-25">
+        <div id="login-header" class="mt-2 mb-4">
+            <h2>Login</h2>
+            <small>Enter your details</small>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group my-3">
+                <input type="email" formControlName="emailControl" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email Address">
+
+                @if (emailField && emailField.invalid && (emailField.dirty || emailField.touched)) {
+                    <div class="alert alert-danger my-2 h-auto p-2">
+                    @if (emailField.hasError('required')) {
+                        <div>Email is required.</div>
+                    }
+                    </div>
+                }
+
+            </div>
+            <div class="form-group my-3">
+                <input type="password" formControlName="passwordControl" class="form-control" id="exampleInputPassword1" placeholder="Password">
+
+                @if (emailField && emailField.invalid && (emailField.dirty || emailField.touched)) {
+                    <div class="alert alert-danger my-2 h-auto p-2">
+                    @if (emailField.hasError('required')) {
+                        <div>Password is required.</div>
+                    }
+                    </div>
+                }
+
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Remember me</label>
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary w-100 my-2">Submit</button>
+                <a routerLink="/register" routerLinkActive="active"class="btn btn-secondary w-100 my-2">Register</a>
+            </div>
+        </form>
+
+    </div>
+</div>

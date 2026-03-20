@@ -1,0 +1,61 @@
+<div id="main-content" class="d-flex container-fluid justify-content-evenly align-items-center h-100vh register-background">
+
+    <div id="form-container" class="d-flex flex-column border border-3 bg-white  p-5 w-25">
+        <div id="login-header" class="mt-2 mb-4">
+            <h2>Login</h2>
+            <small>Enter your details</small>
+        </div>
+        
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+            <div class="form-group my-3">
+                <input type="text" formControlName="name" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Name">
+                @if (name && name.invalid && (name.dirty || name.touched)) {
+                    <div class="alert alert-danger my-2 h-auto p-2">
+                    @if (name.hasError('required')) {
+                        <div>Name is required.</div>
+                    }
+                    </div>
+                }
+            </div>
+            <div class="form-group my-3">
+                <input type="email" formControlName="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email Address">
+                @if (email && email.invalid && (email.dirty || email.touched)) {
+                    <div class="alert alert-danger my-2 h-auto p-2">
+                    @if (email.hasError('required')) {
+                        <div>Email is required.</div>
+                    }
+                    </div>
+                }
+                
+            </div>
+            <div class="form-group my-3">
+                <input type="password" formControlName="firstPassword" class="form-control" id="firstPassword" placeholder="Enter Password">
+
+                @if (firstPassword && firstPassword.invalid && (firstPassword.dirty || firstPassword.touched)) {
+                    <div class="alert alert-danger my-2 h-auto p-2">
+                    @if (firstPassword.hasError('required')) {
+                        <div>Email is required.</div>
+                    }
+                    </div>
+                }
+
+            </div>
+            <div class="form-group my-3">
+                <input type="password" formControlName="secondPassword" class="form-control" id="password2" placeholder="Re-enter Password">
+                @if (secondPassword && secondPassword.invalid && (secondPassword.dirty || secondPassword.touched)) {
+                    <div class="alert alert-danger my-2 h-auto p-2">
+                    @if (secondPassword.hasError('required')) {
+                        <div>Email is required.</div>
+                    }
+                    </div>
+                    @if (secondPassword.hasError('passwordMismatch')) {
+                        <div>Password needs to match is required.</div>
+                    }
+                }
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary w-100 my-2">Register</button>
+            </div>
+        </form>
+    </div>
+</div>

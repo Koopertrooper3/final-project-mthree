@@ -1,0 +1,127 @@
+GROCERY LIST HELPER - SQL NOTES
+
+Main goal:
+This database is for a Grocery List Helper app where users can register/login, create shopping lists, add shopping items, track pantry items, and connect ingredients to shopping lists.
+
+--------------------------------------------------
+TABLES
+--------------------------------------------------
+
+1. users
+- Stores account information for each user
+- Columns:
+  - id = primary key
+  - name = user's name
+  - email = unique email for login
+  - password = user password
+  - created_at = timestamp when user account was created
+
+2. shopping_lists
+- Stores grocery lists created by a user
+- Columns:
+  - id = primary key
+  - user_id = foreign key linked to users.id
+  - title = name of the list
+  - created_at = timestamp of list creation
+
+3. shopping_items
+- Stores the actual visible items inside a shopping list
+- Columns:
+  - id = primary key
+  - list_id = foreign key linked to shopping_lists.id
+  - item_name = item name
+  - quantity = quantity of item
+  - category = item category
+  - bought = whether item has been bought or not
+  - created_at = timestamp of item creation
+
+4. pantry_items
+- Stores items the user already has at home
+- Columns:
+  - id = primary key
+  - user_id = foreign key linked to users.id
+  - item_name = pantry item name
+  - quantity = quantity owned
+  - category = pantry item category
+  - expiry_date = optional expiry date
+  - created_at = timestamp of pantry item creation
+
+5. ingredients
+- Stores reusable ingredient records
+- Columns:
+  - id = primary key
+  - name = ingredient name
+  - category = ingredient category
+
+6. list_ingredients
+- Junction table linking shopping lists and ingredients
+- Used because one list can have many ingredients and one ingredient can be used in many lists
+- Columns:
+  - id = primary key
+  - list_id = foreign key linked to shopping_lists.id
+  - ingredient_id = foreign key linked to ingredients.id
+  - quantity = amount needed for that list
+
+--------------------------------------------------
+RELATIONSHIP TYPES
+--------------------------------------------------
+
+1. User -> ShoppingList
+- One-to-many
+- One user can have many shopping lists
+- Each shopping list belongs to one user
+
+2. ShoppingList -> ShoppingItem
+- One-to-many
+- One shopping list can have many shopping items
+- Each shopping item belongs to one shopping list
+
+3. User -> PantryItem
+- One-to-many
+- One user can have many pantry items
+- Each pantry item belongs to one user
+
+4. ShoppingList -> Ingredient
+- Many-to-many
+- One shopping list can contain many ingredients
+- One ingredient can appear in many shopping lists
+- This is handled through the list_ingredients table
+
+--------------------------------------------------
+KEYS
+--------------------------------------------------
+
+Primary Keys:
+- users.id
+- shopping_lists.id
+- shopping_items.id
+- pantry_items.id
+- ingredients.id
+- list_ingredients.id
+
+Foreign Keys:
+- shopping_lists.user_id -> users.id
+- shopping_items.list_id -> shopping_lists.id
+- pantry_items.user_id -> users.id
+- list_ingredients.list_id -> shopping_lists.id
+- list_ingredients.ingredient_id -> ingredients.id
+
+--------------------------------------------------
+NOTES FOR BACKEND
+--------------------------------------------------
+
+Spring Boot entities will probably be:
+- User
+- ShoppingList
+- ShoppingItem
+- PantryItem
+- Ingredient
+- ListIngredient
+
+Possible backend modules/endpoints later:
+- auth/register
+- auth/login
+- shopping list CRUD
+- shopping item CRUD
+- pantry item CRUD
+- ingredient/list linking CRUD
