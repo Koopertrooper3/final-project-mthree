@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormControl,FormGroup,ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,10 +7,9 @@ import { AuthService, loginObject } from '../auth.service';
 @Component({
   selector: 'app-login-page',
   imports: [
-    CommonModule,
     RouterLink,
     ReactiveFormsModule
-  ],
+],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
