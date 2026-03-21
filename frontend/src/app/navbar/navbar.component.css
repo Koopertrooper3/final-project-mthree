@@ -1,0 +1,12 @@
+.active{
+    background-color: #088b34;
+    border-radius: 20%/80%;
+    padding-left: 1.5rem;
+}
+.inactive{
+    border-radius: 20%/80%;
+    padding-left: 1.5rem;
+}
+.inactive:hover{
+    background-color: #088b34;
+}

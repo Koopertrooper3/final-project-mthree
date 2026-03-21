@@ -71,13 +71,7 @@ export class RegisterPageComponent {
     }
 
     let registerInfo : registerObject = {name: this.name.value,email: this.email.value, password: this.secondPassword.value}
-    this.auth.registerAttempt(registerInfo).subscribe((res) =>{
-      if(res === "Email already exists"){
-        console.log("Email already exists")
-      }else{
-        this.router.navigateByUrl("/login")
-      }
-    })
-
+    this.auth.registerAttempt(registerInfo)
+    
   }
 }

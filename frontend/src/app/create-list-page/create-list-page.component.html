@@ -1,0 +1,40 @@
+<section id="page-content" class="d-flex container-fluid h-100vh login-background p-0">
+    <app-navbar></app-navbar>
+    <div id="main-content" class="d-flex flex-column p-5 w-100">
+        <div id="title-section">
+            <h1>Create a List</h1>
+            <small>Create your grocery list here!</small>
+        </div>
+        <hr>
+        
+
+       <div id="grocery-form" class="d-flex flex-column">
+
+            <div id="grocery-title" class="w-25">
+                <form class="">
+                    <div class="form-group my-2 w-100">
+                        <label for="exampleInputEmail1">Grocery List Name</label>
+                        <input type="email" class="form-control my-3" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Grocery List Name">
+                    </div>
+                </form>
+            </div>
+            
+            <div id="ingredient-information" class="d-flex flex-row">
+                <div id="ingredient-form" class="d-flex flex-column">
+                    Form and information
+                    <select name="Sauces" multiple>
+                        <option value="Mustard">Mustard</option>
+                        <option selected value="Barbecue">Barbecue</option>
+                        <option value="Ketchup">Ketchup</option>
+                        <option selected value="Mayonaise">Mayonaise</option>
+                    </select>
+                </div>
+                <div id="ingredient-list">
+                    Grocery list
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+</section>

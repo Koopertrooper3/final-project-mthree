@@ -1,0 +1,35 @@
+<div id="page-content" class="d-flex container-fluid h-100vh login-background p-0">
+    <app-navbar></app-navbar>
+    
+    <section id="main-content" class="d-flex flex-column p-5 w-100">
+        <div id="title-section">
+            <h1>Dashboard</h1>
+            <small>See all your grocery lists here</small>
+        </div>
+
+        <div class="pill-button bg-primary align-self-end py-1 me-3">
+            <a href="create" class="fs-6 nav-link text-white">Create</a>
+        </div>
+        <hr class="">
+
+        <div id="grocery-list">
+            <ul class="list-group">
+                  <li class="list-group-item d-flex flex-row">
+                    <div id="grocery-list-name" class="mx-2 py-1">
+                       <a class="text-black nav-link mb-0 fs-6">List 1</a>
+                    </div>
+                    <div class="grocery-list-buttons d-flex flex-row align-self-end w-auto ms-auto">
+                        <div class="bg-primary pill-button py-1">
+                            <a class="nav-link text-white fs-6" href="#">Edit</a>
+                        </div>
+                        <div class="bg-primary pill-button ms-3">
+                            <button class="nav-link text-white fs-6">Delete</button>
+                        </div>
+                    </div>
+                  </li>
+
+            </ul>
+
+        </div>
+    </section>
+</div>

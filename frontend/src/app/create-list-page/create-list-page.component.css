@@ -1,0 +1,7 @@
+.pill-button{
+    border-radius: 20%/100%;
+    width: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

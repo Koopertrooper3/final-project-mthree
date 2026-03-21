@@ -1,4 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
 .h-100vh{
     min-height: 100vh;
 }
+
+#main-content{
+    margin-left: 15%;
+    width: auto;
+}
+
+.sidebar {
+    position:fixed;
+    top: 0;
+    bottom: 0;
+    width: 15%;
+}
+
+.bg-primary{
+    background-color: #93F52A;
+}
+
