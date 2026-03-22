@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard-page/dashboard-page.component';
 import { CreateListPageComponent } from './create-list-page/create-list-page.component';
 
 export const routes: Routes = [
+    
     {
         path: 'login',
         component: LoginPageComponent,
@@ -24,5 +25,9 @@ export const routes: Routes = [
         path: "create",
         component: CreateListPageComponent,
         title: "Create a Grocery List"
+    },
+    {
+        path: "**",
+        redirectTo: 'login'
     }
 ];

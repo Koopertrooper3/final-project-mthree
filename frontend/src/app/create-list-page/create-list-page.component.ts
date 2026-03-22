@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ingredient, GrocerService } from '../grocer.service';
 
-
-interface ingredient{
-  name: String
-  tags: String[]
-}
 
 @Component({
   selector: 'app-create-list-page',
@@ -21,17 +17,9 @@ interface ingredient{
 export class CreateListPageComponent {
 
 
-  currentIngredientTags : string[] = ["Vegetable","Crame","Protein-Rich","afjlgbnsjkldngjkadsn gkasdbn","test","test","test","test"]
-  groceryList : ingredient[] = [
-    {
-      name: "Potato",
-      tags: ["Carbohydrate", "Vegetable"]
-    },
-    {
-      name: "Potato",
-      tags: ["Carbohydrate", "Vegetable","Acorn","Protein","Fatty", "Crunchy","Large","Heavy"]
-    }
-  ]
+  currentIngredientTags : string[] = []
+  groceryList : ingredient[] = []
+  
   ingredientForm: FormGroup = new FormGroup({
     ingredientName: new FormControl("",
       [
