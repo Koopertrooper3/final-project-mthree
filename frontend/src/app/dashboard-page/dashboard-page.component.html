@@ -14,19 +14,24 @@
 
         <div id="grocery-list">
             <ul class="list-group">
-                  <li class="list-group-item d-flex flex-row">
+
+
+                @for (list of (allLists | async); track $index) {
+                    <li class="list-group-item d-flex flex-row">
                     <div id="grocery-list-name" class="mx-2 py-1">
-                       <a class="text-black nav-link mb-0 fs-6">List 1</a>
+                       <a class="text-black nav-link mb-0 fs-6">{{list.title}}</a>
                     </div>
                     <div class="grocery-list-buttons d-flex flex-row align-self-end w-auto ms-auto">
                         <div class="bg-primary pill-button py-1">
-                            <a class="nav-link text-white fs-6" href="#">Edit</a>
+                            <a class="nav-link text-white fs-6" [routerLink]="['/edit/',list.id]">Edit</a>
                         </div>
                         <div class="bg-primary pill-button ms-3">
-                            <button class="nav-link text-white fs-6">Delete</button>
+                            <button class="nav-link text-white fs-6" (click)="deletePage(list.id)">Delete</button>
                         </div>
                     </div>
                   </li>
+                }
+                  
 
             </ul>
 

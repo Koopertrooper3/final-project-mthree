@@ -31,10 +31,7 @@ export class AuthService {
     
   }
 
-  
-  public set userId(v : number) {
-    this.userID = v;
-  }
+
   
   loginAttempt(login : LoginObject){
     return this.http.post(environment.apiUrl + "/api/auth/login",login)

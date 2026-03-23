@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../environments/environment';
-
+import { AuthService } from './auth.service';
+import { lastValueFrom } from 'rxjs';
 
 export interface ingredient{
   name: String
@@ -20,20 +21,21 @@ interface groceryListRequest{
 })
 export class GrocerService {
 
-
-  userID = "1";
-
-  constructor(private http : HttpClient, private router : Router) {
+  constructor(private http : HttpClient ) {
     
   }
 
-  
-  public set userId(v : string) {
-    this.userID = v;
-  }
+
 
   submitList(name : string, ingredientList : ingredient[]){
 
+  }
+
+  getUserGroceryLists(){
+    //let currentUserID = this.authService.userID
+    let currentUserID = 1;
+    
+    return this.http.get(environment.apiUrl + "/api/lists/user/"+currentUserID)
   }
   
   // loginAttempt(login : loginObject){
