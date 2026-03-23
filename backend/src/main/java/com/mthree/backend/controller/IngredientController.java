@@ -5,6 +5,7 @@ import com.mthree.backend.dto.ListIngredientRequest;
 import com.mthree.backend.entity.Ingredient;
 import com.mthree.backend.entity.ListIngredient;
 import com.mthree.backend.service.IngredientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class IngredientController {
     private IngredientService ingredientService;
 
     @PostMapping
-    public String createIngredient(@RequestBody IngredientRequest request) {
+    public String createIngredient(@Valid @RequestBody IngredientRequest request) {
         return ingredientService.createIngredient(request);
     }
 
@@ -29,7 +30,7 @@ public class IngredientController {
     }
 
     @PostMapping("/link")
-    public String addIngredientToList(@RequestBody ListIngredientRequest request) {
+    public String addIngredientToList(@Valid @RequestBody ListIngredientRequest request) {
         return ingredientService.addIngredientToList(request);
     }
 

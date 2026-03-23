@@ -1,8 +1,14 @@
 package com.mthree.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ShoppingListRequest {
 
+    @NotBlank(message = "List title is required")
     private String title;
+
+    @NotNull(message = "User ID is required")
     private Integer userId;
 
     public ShoppingListRequest() {

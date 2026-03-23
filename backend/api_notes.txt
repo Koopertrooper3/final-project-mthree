@@ -9,70 +9,97 @@ General notes:
   YYYY-MM-DD
   Example: 2026-08-01
 - Change root password--default is set to "root"
+- Validation works on backend request bodies.
+- If invalid input is sent, backend returns field-specific validation errors as JSON.
 
+==================================================
+TLDR (endpoint list)
+==================================================
 
-TLDR (endpoint list):
-
---------------------------------------------------
-
-1. Auth
-
+1. AUTH
 POST /api/auth/register
-
 POST /api/auth/login
 
---------------------------------------------------
-
-2. Shopping Lists
-
+2. SHOPPING LISTS
 POST /api/lists
-
+POST /api/lists/full
 GET /api/lists/user/{userId}
-
 PUT /api/lists/{listId}
-
 DELETE /api/lists/{listId}
 
---------------------------------------------------
-
-3. Shopping Items
-
+3. SHOPPING ITEMS
 POST /api/items
-
 GET /api/items/list/{listId}
-
 PUT /api/items/{itemId}
-
 PATCH /api/items/{itemId}/bought
-
 DELETE /api/items/{itemId}
 
---------------------------------------------------
-
-4. Pantry
-
+4. PANTRY
 POST /api/pantry
-
+POST /api/pantry/move-list
 GET /api/pantry/user/{userId}
-
 PUT /api/pantry/{pantryItemId}
-
 DELETE /api/pantry/{pantryItemId}
 
---------------------------------------------------
-
-5. Ingredients
-
+5. INGREDIENTS
 POST /api/ingredients
-
 GET /api/ingredients
-
 POST /api/ingredients/link
-
 GET /api/ingredients/list/{listId}
-
 DELETE /api/ingredients/link/{listIngredientId}
 
+==================================================
+VALIDATION CURRENTLY USED
+==================================================
+
+The backend now uses validation annotations on DTOs.
+
+Main validation rules used:
+- @NotBlank
+  Used for required text fields like:
+  - name
+  - email
+  - password
+  - list title
+  - item name
+  - ingredient name
+
+- @NotNull
+  Used for required non-text fields like:
+  - userId
+  - listId
+  - ingredientId
+  - quantity
+  - bought
+
+- @Positive
+  Used for numeric values that must be greater than 0:
+  - quantity
+
+- @Email
+  Used for email format validation
+
+- @Size(min = 4)
+  Used on register password so password must be at least 4 characters
+
+- @Valid
+  Used for nested request bodies like:
+  - full shopping list creation route
+  - item lists inside full list create
+  - ingredient link lists inside full list create
+
+If validation fails, backend returns JSON field errors like:
+{
+  "email": "Email format is invalid",
+  "password": "Password must be at least 4 characters"
+}
+
+Business logic checks are also still used in services, for example:
+- Email already exists
+- User not found
+- Shopping list not found
+- Ingredient not found
+- Ingredient already exists
 
 ==================================================
 1. AUTH
@@ -98,12 +125,27 @@ Request body example:
 Expected success response:
 User registered successfully
 
-Possible other responses:
+Possible business logic responses:
 - Email already exists
 
-Notes:
-- Email must be unique.
-- If the same email is sent again, registration will fail.
+Validation used:
+- name -> required
+- email -> required + valid email format
+- password -> required + minimum 4 characters
+
+Example invalid request:
+{
+  "name": "",
+  "email": "not-an-email",
+  "password": ""
+}
+
+Example validation response:
+{
+  "name": "Name is required",
+  "email": "Email format is invalid",
+  "password": "Password must be at least 4 characters"
+}
 
 --------------------------------------------------
 
@@ -124,11 +166,37 @@ Request body example:
 }
 
 Expected success response:
-Login successful
+{
+  "message": "Login successful",
+  "userId": 3
+}
 
 Possible other responses:
-- User not found
-- Invalid password
+{
+  "message": "User not found",
+  "userId": null
+}
+
+{
+  "message": "Invalid password",
+  "userId": null
+}
+
+Validation used:
+- email -> required + valid email format
+- password -> required
+
+Example invalid request:
+{
+  "email": "",
+  "password": ""
+}
+
+Example validation response:
+{
+  "email": "Email is required",
+  "password": "Password is required"
+}
 
 ==================================================
 2. SHOPPING LISTS
@@ -155,14 +223,115 @@ Shopping list created successfully
 
 Possible other responses:
 - User not found
-- List title cannot be empty
 
-Notes:
-- userId must be an existing user in the users table.
+Validation used:
+- title -> required
+- userId -> required
+
+Example invalid request:
+{
+  "title": "",
+  "userId": null
+}
+
+Example validation response:
+{
+  "title": "List title is required",
+  "userId": "User ID is required"
+}
 
 --------------------------------------------------
 
-B. Get Shopping Lists By User
+B. Create Full Shopping List (list + items + ingredients)
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/lists/full
+
+Purpose:
+Creates a shopping list and also creates its shopping items and linked ingredients in one request.
+
+Request body example:
+{
+  "title": "Frontend Test List",
+  "userId": 3,
+  "items": [
+    {
+      "itemName": "Milk",
+      "quantity": 2,
+      "category": "Dairy"
+    },
+    {
+      "itemName": "Apples",
+      "quantity": 5,
+      "category": "Fruit"
+    }
+  ],
+  "ingredients": [
+    {
+      "ingredientId": 2,
+      "quantity": 12
+    }
+  ]
+}
+
+Expected success response:
+{
+  "message": "Shopping list with items and ingredients created successfully",
+  "listId": 9
+}
+
+Possible business logic responses:
+{
+  "message": "User not found",
+  "listId": null
+}
+
+{
+  "message": "List title cannot be empty",
+  "listId": null
+}
+
+Validation used:
+- title -> required
+- userId -> required
+- each item itemName -> required
+- each item quantity -> required + positive
+- each ingredient ingredientId -> required
+- each ingredient quantity -> required + positive
+
+Example invalid request:
+{
+  "title": "",
+  "userId": null,
+  "items": [
+    {
+      "itemName": "",
+      "quantity": 0,
+      "category": "Dairy"
+    }
+  ],
+  "ingredients": [
+    {
+      "ingredientId": null,
+      "quantity": 0
+    }
+  ]
+}
+
+Possible validation response example:
+{
+  "title": "List title is required",
+  "userId": "User ID is required"
+}
+
+Notes:
+- This route was added so frontend can create a full grocery list in one action instead of multiple separate requests.
+
+--------------------------------------------------
+
+C. Get Shopping Lists By User
 Method:
 GET
 
@@ -196,7 +365,7 @@ Notes:
 
 --------------------------------------------------
 
-C. Update Shopping List
+D. Update Shopping List
 Method:
 PUT
 
@@ -219,11 +388,23 @@ Shopping list updated successfully
 
 Possible other responses:
 - Shopping list not found
-- List title cannot be empty
+
+Validation used:
+- title -> required
+
+Example invalid request:
+{
+  "title": ""
+}
+
+Example validation response:
+{
+  "title": "List title is required"
+}
 
 --------------------------------------------------
 
-D. Delete Shopping List
+E. Delete Shopping List
 Method:
 DELETE
 
@@ -269,11 +450,26 @@ Shopping item created successfully
 
 Possible other responses:
 - Shopping list not found
-- Item name cannot be empty
-- Quantity must be greater than 0
 
-Notes:
-- listId must already exist in shopping_lists.
+Validation used:
+- itemName -> required
+- quantity -> required + positive
+- listId -> required
+
+Example invalid request:
+{
+  "itemName": "",
+  "quantity": 0,
+  "category": "Fruit",
+  "listId": null
+}
+
+Example validation response:
+{
+  "itemName": "Item name is required",
+  "quantity": "Quantity must be greater than 0",
+  "listId": "List ID is required"
+}
 
 --------------------------------------------------
 
@@ -341,8 +537,23 @@ Shopping item updated successfully
 
 Possible other responses:
 - Shopping item not found
-- Item name cannot be empty
-- Quantity must be greater than 0
+
+Validation used:
+- itemName -> required
+- quantity -> required + positive
+
+Example invalid request:
+{
+  "itemName": "",
+  "quantity": -1,
+  "category": "Fruit"
+}
+
+Example validation response:
+{
+  "itemName": "Item name is required",
+  "quantity": "Quantity must be greater than 0"
+}
 
 --------------------------------------------------
 
@@ -369,6 +580,19 @@ Shopping item bought status updated successfully
 
 Possible other responses:
 - Shopping item not found
+
+Validation used:
+- bought -> required
+
+Example invalid request:
+{
+  "bought": null
+}
+
+Example validation response:
+{
+  "bought": "Bought status is required"
+}
 
 --------------------------------------------------
 
@@ -419,15 +643,74 @@ Pantry item created successfully
 
 Possible other responses:
 - User not found
-- Pantry item name cannot be empty
-- Quantity must be greater than 0
 
-Notes:
-- expiryDate is optional, but if included it must be in YYYY-MM-DD format.
+Validation used:
+- itemName -> required
+- quantity -> required + positive
+- userId -> required
+- expiryDate format expected if used -> YYYY-MM-DD
+
+Example invalid request:
+{
+  "itemName": "",
+  "quantity": -1,
+  "category": "Spread",
+  "expiryDate": "2026-08-01",
+  "userId": null
+}
+
+Example validation response:
+{
+  "itemName": "Pantry item name is required",
+  "quantity": "Quantity must be greater than 0",
+  "userId": "User ID is required"
+}
 
 --------------------------------------------------
 
-B. Get Pantry Items By User
+B. Move Shopping List Items To Pantry
+Method:
+POST
+
+Endpoint:
+http://localhost:8080/api/pantry/move-list
+
+Purpose:
+Takes all shopping items from a shopping list and adds them into pantry for that user.
+If a pantry item with the same name already exists for that user, quantity is increased.
+
+Request body example:
+{
+  "listId": 9,
+  "userId": 3
+}
+
+Expected success response:
+Shopping list items moved to pantry successfully
+
+Possible other responses:
+- User not found
+- Shopping list not found
+
+Validation used:
+- listId -> required
+- userId -> required
+
+Example invalid request:
+{
+  "listId": null,
+  "userId": null
+}
+
+Example validation response:
+{
+  "listId": "List ID is required",
+  "userId": "User ID is required"
+}
+
+--------------------------------------------------
+
+C. Get Pantry Items By User
 Method:
 GET
 
@@ -457,7 +740,7 @@ Notes:
 
 --------------------------------------------------
 
-C. Update Pantry Item
+D. Update Pantry Item
 Method:
 PUT
 
@@ -483,15 +766,28 @@ Pantry item updated successfully
 
 Possible other responses:
 - Pantry item not found
-- Pantry item name cannot be empty
-- Quantity must be greater than 0
 
-Notes:
-- If expiryDate is blank or omitted during update, it may be set to null depending on request handling.
+Validation used:
+- itemName -> required
+- quantity -> required + positive
+
+Example invalid request:
+{
+  "itemName": "",
+  "quantity": 0,
+  "category": "Spread",
+  "expiryDate": "2026-09-01"
+}
+
+Example validation response:
+{
+  "itemName": "Pantry item name is required",
+  "quantity": "Quantity must be greater than 0"
+}
 
 --------------------------------------------------
 
-D. Delete Pantry Item
+E. Delete Pantry Item
 Method:
 DELETE
 
@@ -534,8 +830,21 @@ Expected success response:
 Ingredient created successfully
 
 Possible other responses:
-- Ingredient name cannot be empty
 - Ingredient already exists
+
+Validation used:
+- name -> required
+
+Example invalid request:
+{
+  "name": "",
+  "category": "Dairy"
+}
+
+Example validation response:
+{
+  "name": "Ingredient name is required"
+}
 
 --------------------------------------------------
 
@@ -588,11 +897,25 @@ Ingredient added to shopping list successfully
 Possible other responses:
 - Shopping list not found
 - Ingredient not found
-- Quantity must be greater than 0
 
-Notes:
-- listId must exist in shopping_lists.
-- ingredientId must exist in ingredients.
+Validation used:
+- listId -> required
+- ingredientId -> required
+- quantity -> required + positive
+
+Example invalid request:
+{
+  "listId": null,
+  "ingredientId": null,
+  "quantity": 0
+}
+
+Example validation response:
+{
+  "listId": "List ID is required",
+  "ingredientId": "Ingredient ID is required",
+  "quantity": "Quantity must be greater than 0"
+}
 
 --------------------------------------------------
 
@@ -655,3 +978,6 @@ Ingredient removed from shopping list successfully
 
 Possible other responses:
 - Linked ingredient not found
+
+
+

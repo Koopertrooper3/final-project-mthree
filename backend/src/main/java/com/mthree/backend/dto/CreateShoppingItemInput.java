@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public class UpdatePantryItemRequest {
+public class CreateShoppingItemInput {
 
-    @NotBlank(message = "Pantry item name is required")
+    @NotBlank(message = "Item name is required")
     private String itemName;
 
     @NotNull(message = "Quantity is required")
@@ -15,40 +15,30 @@ public class UpdatePantryItemRequest {
 
     private String category;
 
-    private String expiryDate;
-
-    public UpdatePantryItemRequest() {
+    public CreateShoppingItemInput() {
     }
 
     public String getItemName() {
         return itemName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     public Integer getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
 
     public String getCategory() {
         return category;
     }
 
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
     }
 }
