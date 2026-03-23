@@ -21,7 +21,7 @@ interface groceryListRequest{
 })
 export class GrocerService {
 
-  constructor(private http : HttpClient ) {
+  constructor(private http : HttpClient, private authService : AuthService ) {
     
   }
 
@@ -32,8 +32,8 @@ export class GrocerService {
   }
 
   getUserGroceryLists(){
-    //let currentUserID = this.authService.userID
-    let currentUserID = 1;
+    let currentUserID = this.authService.userID
+    //let currentUserID = 1;
     
     return this.http.get(environment.apiUrl + "/api/lists/user/"+currentUserID)
   }
