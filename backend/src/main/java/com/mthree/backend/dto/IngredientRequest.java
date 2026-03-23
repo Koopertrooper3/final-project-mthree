@@ -1,8 +1,12 @@
 package com.mthree.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class IngredientRequest {
 
+    @NotBlank(message = "Ingredient name is required")
     private String name;
+
     private String category;
 
     public IngredientRequest() {

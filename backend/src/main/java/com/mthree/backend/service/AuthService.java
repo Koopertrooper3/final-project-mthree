@@ -1,6 +1,7 @@
 package com.mthree.backend.service;
 
 import com.mthree.backend.dto.LoginRequest;
+import com.mthree.backend.dto.LoginResponse;
 import com.mthree.backend.dto.RegisterRequest;
 import com.mthree.backend.entity.User;
 import com.mthree.backend.repository.UserRepository;
@@ -32,19 +33,19 @@ public class AuthService {
         return "User registered successfully";
     }
 
-    public String login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         Optional<User> foundUser = userRepository.findByEmail(request.getEmail());
 
         if (foundUser.isEmpty()) {
-            return "User not found";
+            return new LoginResponse("User not found", null);
         }
 
         User user = foundUser.get();
 
         if (!user.getPassword().equals(request.getPassword())) {
-            return "Invalid password";
+            return new LoginResponse("Invalid password", null);
         }
 
-        return "Login successful";
+        return new LoginResponse("Login successful", user.getId());
     }
 }

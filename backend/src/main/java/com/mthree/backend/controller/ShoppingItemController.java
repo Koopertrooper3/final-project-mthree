@@ -5,6 +5,7 @@ import com.mthree.backend.dto.UpdateBoughtStatusRequest;
 import com.mthree.backend.dto.UpdateShoppingItemRequest;
 import com.mthree.backend.entity.ShoppingItem;
 import com.mthree.backend.service.ShoppingItemService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class ShoppingItemController {
     private ShoppingItemService shoppingItemService;
 
     @PostMapping
-    public String createItem(@RequestBody ShoppingItemRequest request) {
+    public String createItem(@Valid @RequestBody ShoppingItemRequest request) {
         return shoppingItemService.createItem(request);
     }
 
@@ -29,12 +30,12 @@ public class ShoppingItemController {
     }
 
     @PutMapping("/{itemId}")
-    public String updateItem(@PathVariable Integer itemId, @RequestBody UpdateShoppingItemRequest request) {
+    public String updateItem(@PathVariable Integer itemId, @Valid @RequestBody UpdateShoppingItemRequest request) {
         return shoppingItemService.updateItem(itemId, request);
     }
 
     @PatchMapping("/{itemId}/bought")
-    public String updateBoughtStatus(@PathVariable Integer itemId, @RequestBody UpdateBoughtStatusRequest request) {
+    public String updateBoughtStatus(@PathVariable Integer itemId, @Valid @RequestBody UpdateBoughtStatusRequest request) {
         return shoppingItemService.updateBoughtStatus(itemId, request);
     }
 

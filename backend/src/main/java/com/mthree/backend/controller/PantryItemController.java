@@ -1,9 +1,11 @@
 package com.mthree.backend.controller;
 
+import com.mthree.backend.dto.MoveListToPantryRequest;
 import com.mthree.backend.dto.PantryItemRequest;
 import com.mthree.backend.dto.UpdatePantryItemRequest;
 import com.mthree.backend.entity.PantryItem;
 import com.mthree.backend.service.PantryItemService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,13 @@ public class PantryItemController {
     private PantryItemService pantryItemService;
 
     @PostMapping
-    public String createPantryItem(@RequestBody PantryItemRequest request) {
+    public String createPantryItem(@Valid @RequestBody PantryItemRequest request) {
         return pantryItemService.createPantryItem(request);
+    }
+
+    @PostMapping("/move-list")
+    public String moveListItemsToPantry(@Valid @RequestBody MoveListToPantryRequest request) {
+        return pantryItemService.moveListItemsToPantry(request);
     }
 
     @GetMapping("/user/{userId}")
@@ -29,7 +36,7 @@ public class PantryItemController {
 
     @PutMapping("/{pantryItemId}")
     public String updatePantryItem(@PathVariable Integer pantryItemId,
-                                   @RequestBody UpdatePantryItemRequest request) {
+                                   @Valid @RequestBody UpdatePantryItemRequest request) {
         return pantryItemService.updatePantryItem(pantryItemId, request);
     }
 

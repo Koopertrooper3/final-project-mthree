@@ -1,7 +1,10 @@
 package com.mthree.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class UpdateShoppingListRequest {
 
+    @NotBlank(message = "List title is required")
     private String title;
 
     public UpdateShoppingListRequest() {

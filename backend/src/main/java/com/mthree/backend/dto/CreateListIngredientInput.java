@@ -3,10 +3,7 @@ package com.mthree.backend.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public class ListIngredientRequest {
-
-    @NotNull(message = "List ID is required")
-    private Integer listId;
+public class CreateListIngredientInput {
 
     @NotNull(message = "Ingredient ID is required")
     private Integer ingredientId;
@@ -15,27 +12,19 @@ public class ListIngredientRequest {
     @Positive(message = "Quantity must be greater than 0")
     private Integer quantity;
 
-    public ListIngredientRequest() {
-    }
-
-    public Integer getListId() {
-        return listId;
-    }
-
-    public void setListId(Integer listId) {
-        this.listId = listId;
+    public CreateListIngredientInput() {
     }
 
     public Integer getIngredientId() {
         return ingredientId;
     }
 
-    public void setIngredientId(Integer ingredientId) {
-        this.ingredientId = ingredientId;
-    }
-
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public void setIngredientId(Integer ingredientId) {
+        this.ingredientId = ingredientId;
     }
 
     public void setQuantity(Integer quantity) {

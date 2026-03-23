@@ -1,7 +1,10 @@
 package com.mthree.backend.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class UpdateBoughtStatusRequest {
 
+    @NotNull(message = "Bought status is required")
     private Boolean bought;
 
     public UpdateBoughtStatusRequest() {

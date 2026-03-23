@@ -1,10 +1,15 @@
 package com.mthree.backend.service;
 
+import com.mthree.backend.dto.MoveListToPantryRequest;
 import com.mthree.backend.dto.PantryItemRequest;
 import com.mthree.backend.dto.UpdatePantryItemRequest;
 import com.mthree.backend.entity.PantryItem;
+import com.mthree.backend.entity.ShoppingItem;
+import com.mthree.backend.entity.ShoppingList;
 import com.mthree.backend.entity.User;
 import com.mthree.backend.repository.PantryItemRepository;
+import com.mthree.backend.repository.ShoppingItemRepository;
+import com.mthree.backend.repository.ShoppingListRepository;
 import com.mthree.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +26,12 @@ public class PantryItemService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ShoppingListRepository shoppingListRepository;
+
+    @Autowired
+    private ShoppingItemRepository shoppingItemRepository;
 
     public String createPantryItem(PantryItemRequest request) {
         Optional<User> foundUser = userRepository.findById(request.getUserId());
@@ -85,6 +96,42 @@ public class PantryItemService {
         pantryItemRepository.save(pantryItem);
 
         return "Pantry item updated successfully";
+    }
+
+    public String moveListItemsToPantry(MoveListToPantryRequest request) {
+        Optional<User> foundUser = userRepository.findById(request.getUserId());
+        Optional<ShoppingList> foundList = shoppingListRepository.findById(request.getListId());
+
+        if (foundUser.isEmpty()) {
+            return "User not found";
+        }
+
+        if (foundList.isEmpty()) {
+            return "Shopping list not found";
+        }
+
+        List<ShoppingItem> shoppingItems = shoppingItemRepository.findByShoppingListId(request.getListId());
+
+        for (ShoppingItem shoppingItem : shoppingItems) {
+            Optional<PantryItem> existingPantryItem =
+                    pantryItemRepository.findByUserIdAndItemName(request.getUserId(), shoppingItem.getItemName());
+
+            if (existingPantryItem.isPresent()) {
+                PantryItem pantryItem = existingPantryItem.get();
+                pantryItem.setQuantity(pantryItem.getQuantity() + shoppingItem.getQuantity());
+                pantryItemRepository.save(pantryItem);
+            } else {
+                PantryItem newPantryItem = new PantryItem();
+                newPantryItem.setItemName(shoppingItem.getItemName());
+                newPantryItem.setQuantity(shoppingItem.getQuantity());
+                newPantryItem.setCategory(shoppingItem.getCategory());
+                newPantryItem.setUser(foundUser.get());
+
+                pantryItemRepository.save(newPantryItem);
+            }
+        }
+
+        return "Shopping list items moved to pantry successfully";
     }
 
     public String deletePantryItem(Integer pantryItemId) {
