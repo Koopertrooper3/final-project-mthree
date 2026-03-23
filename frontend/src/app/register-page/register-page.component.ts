@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService, registerObject } from '../auth.service';
+import { AuthService, RegisterObject } from '../auth.service';
 
 @Component({
   selector: 'app-register-page',
@@ -69,7 +69,7 @@ export class RegisterPageComponent {
       throw new Error("Fields do not exist (null guard)")
     }
 
-    let registerInfo : registerObject = {name: this.name.value,email: this.email.value, password: this.secondPassword.value}
+    let registerInfo : RegisterObject = {name: this.name.value,email: this.email.value, password: this.secondPassword.value}
     this.auth.registerAttempt(registerInfo)
     
   }

@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormControl,FormGroup,ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService, loginObject } from '../auth.service';
+import { AuthService, LoginObject } from '../auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -50,13 +50,7 @@ export class LoginPageComponent {
       throw new Error("Error in fields")
     }
 
-    let login : loginObject = {email: emailField.value, password: passwordField.value}
-    this.auth.loginAttempt(login).subscribe((res) =>{
-      if(res !== "Login successful"){
-        console.log("Login unsuccessful")
-      }else{
-        this.router.navigateByUrl("/dashboard")
-      }
-    })
+    let login : LoginObject = {email: emailField.value, password: passwordField.value}
+    this.auth.loginAttempt(login)
   }
 }

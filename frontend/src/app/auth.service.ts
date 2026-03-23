@@ -4,15 +4,20 @@ import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
 const apiUrl = environment.apiUrl
 
-export interface loginObject{
+export interface LoginObject{
   email: string,
   password: string
 }
 
-export interface registerObject{
+export interface RegisterObject{
   email: string,
   password: string,
   name: string
+}
+
+interface LoginResponse{
+  message: string,
+  userId: number
 }
 
 @Injectable({
@@ -20,22 +25,33 @@ export interface registerObject{
 })
 export class AuthService {
 
-  userID = "1";
+  userID : number = 0;
 
   constructor(private http : HttpClient, private router : Router) {
     
   }
 
   
-  public set userId(v : string) {
+  public set userId(v : number) {
     this.userID = v;
   }
   
-  loginAttempt(login : loginObject){
-    return this.http.post(environment.apiUrl + "/api/auth/login",login,{responseType: 'text'})
+  loginAttempt(login : LoginObject){
+    return this.http.post(environment.apiUrl + "/api/auth/login",login)
+    .subscribe((res) =>{
+
+      let resBody : LoginResponse = res as LoginResponse
+      if(resBody.message !== "Login successful"){
+        console.log(resBody.message)
+      }else{
+
+        this.userID = resBody.userId
+        this.router.navigateByUrl("/dashboard")
+      }
+    })
   }
 
-  registerAttempt(register : registerObject){
+  registerAttempt(register : RegisterObject){
     return this.http.post(environment.apiUrl + "/api/auth/register",register,{responseType: 'text'})
     .subscribe((res) =>{
       if(res === "Email already exists"){
