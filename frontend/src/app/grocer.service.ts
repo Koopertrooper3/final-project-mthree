@@ -6,8 +6,9 @@ import { AuthService } from './auth.service';
 import { lastValueFrom } from 'rxjs';
 
 export interface ingredient{
-  name: String
-  tags: String[]
+  itemName: String
+  quantity: number
+  tag: String
 }
 
 interface groceryListRequest{
@@ -28,11 +29,19 @@ export class GrocerService {
 
 
   submitList(name : string, ingredientList : ingredient[]){
+    let body = {
+      title : name,
+      userId : this.authService.getUserID(),
+      items: ingredientList
+    }
+    this.http.post(environment.apiUrl + "/api/lists/full",body).subscribe((res)=>{
+      console.log(res)
+    })
 
   }
 
   getUserGroceryLists(){
-    let currentUserID = this.authService.userID
+    let currentUserID = this.authService.getUserID()
     //let currentUserID = 1;
     
     return this.http.get(environment.apiUrl + "/api/lists/user/"+currentUserID)

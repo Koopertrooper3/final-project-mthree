@@ -22,9 +22,9 @@
             <div class="form-group my-3">
                 <input type="password" formControlName="passwordControl" class="form-control" id="exampleInputPassword1" placeholder="Password">
 
-                @if (emailField && emailField.invalid && (emailField.dirty || emailField.touched)) {
+                @if (passwordField && passwordField.invalid && (passwordField.dirty || passwordField.touched)) {
                     <div class="alert alert-danger my-2 h-auto p-2">
-                    @if (emailField.hasError('required')) {
+                    @if (passwordField.hasError('required')) {
                         <div>Password is required.</div>
                     }
                     </div>

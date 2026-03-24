@@ -25,13 +25,19 @@ interface LoginResponse{
 })
 export class AuthService {
 
-  userID : number = 0;
 
   constructor(private http : HttpClient, private router : Router) {
     
   }
 
 
+  setUserID(userId : number){
+    localStorage.setItem('userId', userId.toString())
+  }
+
+  getUserID(){
+    return localStorage.getItem('userId')
+  }
   
   loginAttempt(login : LoginObject){
     return this.http.post(environment.apiUrl + "/api/auth/login",login)
@@ -42,7 +48,7 @@ export class AuthService {
         console.log(resBody.message)
       }else{
 
-        this.userID = resBody.userId
+        this.setUserID(resBody.userId)        
         this.router.navigateByUrl("/dashboard")
       }
     })

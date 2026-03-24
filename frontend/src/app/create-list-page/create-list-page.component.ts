@@ -16,29 +16,41 @@ import { ingredient, GrocerService } from '../grocer.service';
 
 export class CreateListPageComponent {
 
-
   currentIngredientTags : string[] = []
   groceryList : ingredient[] = []
   
   ingredientForm: FormGroup = new FormGroup({
-    ingredientName: new FormControl("",
+    listName: new FormControl("",
       [
-        Validators.required,
+        Validators.required
       ]
     ),
-    ingredientTag: new FormControl("",)
+    ingredientName: new FormControl(""),
+    ingredientTag: new FormControl("")
   });
+
+  constructor(private grocer : GrocerService){
+
+  }
 
   removeTag(index : number){
     this.currentIngredientTags.splice(index,1)
   }
 
-  removeTagFromIngredient(ingredientIndex :number, tagIndex :number){
-    this.groceryList[ingredientIndex].tags.splice(tagIndex,1);
+  removeTagFromIngredient(ingredientIndex :number){
+    this.groceryList[ingredientIndex].tag = '';
+  }
+
+  removeIngredient(ingredientIndex: number) {
+    this.groceryList.splice(ingredientIndex,1);
+  }
+
+  get listName(){
+    return this.ingredientForm.get('listName') as FormControl
   }
 
   get ingredientName(){
-    return this.ingredientForm.get('ingredientName');
+    return this.ingredientForm.get('ingredientName') as FormControl;
   }
 
   get ingredientTag(){
@@ -50,24 +62,35 @@ export class CreateListPageComponent {
     if(this.ingredientName && this.ingredientName.value.length != 0){
       this.groceryList.push(
         {
-          name: this.ingredientName?.value,
-          tags: this.currentIngredientTags
+          itemName: this.ingredientName?.value,
+          quantity: 0,
+          tag: this.currentIngredientTags.length > 0 ? this.currentIngredientTags[0] : ''
         }
       )
       this.currentIngredientTags = []
-      this.ingredientForm.reset(this.ingredientName)
-      this.ingredientForm.reset(this.ingredientTag)
+      this.ingredientForm.reset({listName: this.listName.value, ingredientName: '',ingredientTag: ''})
 
     }
     
   }
   addTag(){
+    
     let newTag = this.ingredientTag.value
-    this.currentIngredientTags.push(newTag)
-    this.ingredientForm.reset(this.ingredientTag)
+    if(newTag.length > 0){
+      this.currentIngredientTags.pop()
+      this.currentIngredientTags.push(newTag)
+    }
+    this.ingredientTag.reset('',{onlySelf: true})
   }
 
+  changeQuantity(event : Event, index : number){
+    console.log(parseInt((event.target as HTMLInputElement).value))
+    this.groceryList[index].quantity = parseInt((event.target as HTMLInputElement).value)
+  }
   onSubmit(){
     console.log("submit works")
+    console.log(this.groceryList)
+    console.log(this.listName.value)
+    this.grocer.submitList(this.listName.value,this.groceryList)
   }
 }
