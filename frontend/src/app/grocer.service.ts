@@ -10,7 +10,11 @@ export interface ingredient{
   quantity: number
   tag: String
 }
-
+export interface groceryList{
+  createdAt: any,
+  id : number,
+  title : string,
+}
 interface groceryListRequest{
   groceryListName : string,
   ingredients : ingredient[]
@@ -21,7 +25,7 @@ interface groceryListRequest{
   providedIn: 'root'
 })
 export class GrocerService {
-
+  
   constructor(private http : HttpClient, private authService : AuthService ) {
     
   }
@@ -40,29 +44,18 @@ export class GrocerService {
 
   }
 
+  deleteList(id: number) {
+    this.http.delete(environment.apiUrl + "/api/lists/"+id).subscribe((res)=>{
+      console.log(res)
+    })
+  }
+
   getUserGroceryLists(){
     let currentUserID = this.authService.getUserID()
-    //let currentUserID = 1;
     
     return this.http.get(environment.apiUrl + "/api/lists/user/"+currentUserID)
   }
+
   
-  // loginAttempt(login : loginObject){
-  //   return this.http.post(environment.apiUrl + "/api/auth/login",login,{responseType: 'text'})
-  // }
-
-  // registerAttempt(register : registerObject){
-  //   return this.http.post(environment.apiUrl + "/api/auth/register",register,{responseType: 'text'})
-  //   .subscribe((res) =>{
-  //     if(res === "Email already exists"){
-  //       console.log("Email already exists")
-  //     }else{
-
-  //       //this.userID = res
-  //       this.router.navigateByUrl("/login")
-  //     }
-  //   })
-  // }
-
 
 }

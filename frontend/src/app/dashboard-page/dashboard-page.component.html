@@ -16,7 +16,7 @@
             <ul class="list-group">
 
 
-                @for (list of (allLists | async); track $index) {
+                @for (list of allLists; track $index) {
                     <li class="list-group-item d-flex flex-row">
                     <div id="grocery-list-name" class="mx-2 py-1">
                        <a class="text-black nav-link mb-0 fs-6">{{list.title}}</a>
@@ -26,7 +26,7 @@
                             <a class="nav-link text-white fs-6" [routerLink]="['/edit/',list.id]">Edit</a>
                         </div>
                         <div class="bg-primary pill-button ms-3">
-                            <button class="nav-link text-white fs-6" (click)="deletePage(list.id)">Delete</button>
+                            <button class="nav-link text-white fs-6" (click)="deletePage($index,list.id)">Delete</button>
                         </div>
                     </div>
                   </li>

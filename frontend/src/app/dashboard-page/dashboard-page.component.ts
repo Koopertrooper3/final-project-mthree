@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { GrocerService } from '../grocer.service';
+import { GrocerService, groceryList } from '../grocer.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs/internal/Observable';
 import { RouterLink } from "@angular/router";
@@ -17,16 +17,21 @@ import { RouterLink } from "@angular/router";
 export class DashboardComponent {
   
 
-  allLists : Observable<any>;
+  allLists: groceryList[] = [];
   constructor(private grocer: GrocerService){
-    this.allLists = this.grocer.getUserGroceryLists()
+    this.grocer.getUserGroceryLists().subscribe( (res) => {
+      this.allLists = res as groceryList[];
+    })
+    
   }
 
   getUserGroceryLists(){
     return this.allLists
   }
 
-  deletePage(arg0: any) {
+  deletePage(index: number, id: number) {
+    this.allLists.splice(index,1)
+    this.grocer.deleteList(id)
     throw new Error('Method not implemented.');
   }
 }
