@@ -24,11 +24,11 @@ public class ShoppingList {
     private User user;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "shoppingList")
+    @OneToMany(mappedBy = "shoppingList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShoppingItem> shoppingItems;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "shoppingList")
+    @OneToMany(mappedBy = "shoppingList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ListIngredient> listIngredients;
 
     public ShoppingList() {
