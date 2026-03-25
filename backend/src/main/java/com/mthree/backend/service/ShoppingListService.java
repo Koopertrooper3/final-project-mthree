@@ -144,4 +144,8 @@ public class ShoppingListService {
 
         return "Shopping list deleted successfully";
     }
+
+    public ShoppingList getSingleList(Integer listId){
+        return shoppingListRepository.findById(listId).orElse(new ShoppingList());
+    }
 }

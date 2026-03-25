@@ -4,6 +4,7 @@ import { RegisterPageComponent } from './register-page/register-page.component';
 import { DashboardComponent } from './dashboard-page/dashboard-page.component';
 import { CreateListPageComponent } from './create-list-page/create-list-page.component';
 import { PlaceholderComponent } from './placeholder/placeholder.component';
+import { EditPageComponent } from './edit-page/edit-page.component';
 
 export const routes: Routes = [
     
@@ -29,7 +30,7 @@ export const routes: Routes = [
     },
     {
         path: "edit/:id",
-        component: PlaceholderComponent,
+        component: EditPageComponent,
         title: "Edit List"
     },
     {

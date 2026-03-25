@@ -35,6 +35,11 @@ public class ShoppingListController {
         return shoppingListService.getListsByUserId(userId);
     }
 
+    @GetMapping("/{listId}")
+    public ShoppingList getListById(@PathVariable Integer listId) {
+        return shoppingListService.getSingleList(listId);
+    }
+
     @PutMapping("/{listId}")
     public String updateList(@PathVariable Integer listId, @Valid @RequestBody UpdateShoppingListRequest request) {
         return shoppingListService.updateList(listId, request);

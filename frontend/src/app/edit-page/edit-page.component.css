@@ -1,0 +1,23 @@
+.pill-button{
+    border-radius: 20%/100%;
+    width: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.rounded-input{
+    border-radius: 5%/60%;
+    height: 2rem;
+}
+
+.add-tag-button{
+    height: 2rem
+}
+.button-height{
+    height: 2rem;
+}
+
+.bottom-button{
+    height: 2rem;
+    width: 9rem;
+}

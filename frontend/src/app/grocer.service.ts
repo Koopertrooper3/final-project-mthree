@@ -15,11 +15,6 @@ export interface groceryList{
   id : number,
   title : string,
 }
-interface groceryListRequest{
-  groceryListName : string,
-  ingredients : ingredient[]
-  
-}
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +51,15 @@ export class GrocerService {
     return this.http.get(environment.apiUrl + "/api/lists/user/"+currentUserID)
   }
 
+
+  getGroceryListItems(listId : string){
+
+    return this.http.get(environment.apiUrl + "/api/items/list/"+listId)
+  }
+
+  getGroceryListName(listId : string){
+    return this.http.get(environment.apiUrl + "/api/lists/"+listId)
+  }
   
 
 }
