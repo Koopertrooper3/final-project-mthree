@@ -1,12 +1,12 @@
 .active{
     background-color: #088b34;
+
+}
+
+.navbar-link-spacing{
     border-radius: 20%/80%;
     padding-left: 1.5rem;
 }
-.inactive{
-    border-radius: 20%/80%;
-    padding-left: 1.5rem;
-}
-.inactive:hover{
+.navbar-link-spacing:hover{
     background-color: #088b34;
 }
