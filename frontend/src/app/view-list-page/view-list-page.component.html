@@ -1,0 +1,49 @@
+<div id="page-content" class="d-flex container-fluid h-100vh login-background p-0">
+    <app-navbar></app-navbar>
+    
+    <section id="main-content" class="d-flex flex-column p-5 w-100">
+        <div id="title-section">
+            <h1>{{listName}}</h1>
+        </div>
+
+        <hr class="">
+
+        <div id="grocery-list" class="h-75 p-5 border border-1 border-dark overflow-scroll">
+            <ul class="list-group">
+
+
+                @for (item of groceryList; track $index) {
+                    <li class="list-group-item d-flex flex-row">
+                    <div id="grocery-list-name" class="mx-2 py-1">
+                       <a class="text-black nav-link mb-0 fs-6">{{item.itemName}}</a>
+                    </div>
+                    <div class="ms-3">
+                        <div class="pill-button bg-primary d-flex justify-content-center align-content-center text-nowrap mw-25 w-auto px-3 float-start mx-1 my-1">
+
+                        <p class="btn p-0 mb-0 text-white">
+                        {{item.category}}
+                        </p>
+                        </div>
+                    </div>
+                    <div class="grocery-list-buttons d-flex flex-row align-self-end w-auto ms-auto">
+                        <p class="m-0 mx-4 nav-link lh-lg">Quantity: {{item.quantity}}</p>
+                    </div>
+                  </li>
+                }
+                  
+
+            </ul>
+
+        </div>
+
+        <div id="list-controls" class="d-flex flex-row w-auto my-5 justify-content-center">
+            <div class="bg-primary pill-button py-1">
+                <a class="nav-link text-white fs-6" [routerLink]="['/edit/',listId]">Edit</a>
+            </div>
+            <div class="bg-primary pill-button ms-5 py-1">
+                <button type="button" class="nav-link text-white" (click)="pushListToPantry()">Push To Pantry</button>
+            </div>
+
+        </div>
+    </section>
+</div>

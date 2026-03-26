@@ -6,6 +6,7 @@ import { CreateListPageComponent } from './create-list-page/create-list-page.com
 import { PlaceholderComponent } from './placeholder/placeholder.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { PantryPageComponent } from './pantry-page/pantry-page.component';
+import { ViewListPageComponent } from './view-list-page/view-list-page.component';
 
 export const routes: Routes = [
     {
@@ -42,6 +43,11 @@ export const routes: Routes = [
         path: "pantry",
         component: PantryPageComponent,
         title: "Edit List"
+    },
+    {
+        path: "view/:id",
+        component: ViewListPageComponent,
+        title: "View List"
     },
     {
         path: "**",

@@ -19,7 +19,7 @@
                 @for (list of allLists; track $index) {
                     <li class="list-group-item d-flex flex-row">
                     <div id="grocery-list-name" class="mx-2 py-1">
-                       <a class="text-black nav-link mb-0 fs-6">{{list.title}}</a>
+                       <a class="text-black nav-link mb-0 fs-6" [routerLink]="['/view/',list.id]">{{list.title}}</a>
                     </div>
                     <div class="grocery-list-buttons d-flex flex-row align-self-end w-auto ms-auto">
                         <div class="bg-primary pill-button py-1">
