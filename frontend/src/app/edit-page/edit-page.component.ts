@@ -70,7 +70,6 @@ export class EditPageComponent {
           }
         )
 
-        this.oldDeepGroceryList.set
       })
 
       
@@ -158,9 +157,6 @@ export class EditPageComponent {
       this.grocer.editGroceryListName(this.listId, this.listName.value)
     }
     //Edit items if item changed
-    for(const item of this.groceryList){
-      
-    }
 
     this.groceryList.forEach((item) =>{
       let cleanItem = this.oldDeepGroceryList.get(item.itemName)

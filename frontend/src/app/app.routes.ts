@@ -5,11 +5,12 @@ import { DashboardComponent } from './dashboard-page/dashboard-page.component';
 import { CreateListPageComponent } from './create-list-page/create-list-page.component';
 import { PlaceholderComponent } from './placeholder/placeholder.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
+import { PantryPageComponent } from './pantry-page/pantry-page.component';
 
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: '/login',
+        redirectTo: 'login',
         pathMatch: 'full'
     },
     {
@@ -35,6 +36,11 @@ export const routes: Routes = [
     {
         path: "edit/:id",
         component: EditPageComponent,
+        title: "Edit List"
+    },
+    {
+        path: "pantry",
+        component: PantryPageComponent,
         title: "Edit List"
     },
     {

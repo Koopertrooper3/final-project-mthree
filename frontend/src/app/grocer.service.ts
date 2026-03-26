@@ -16,14 +16,40 @@ export interface groceryList{
   title : string,
 }
 
+export interface pantryItem {
+    category: string,
+    createdAt: any,
+    expiryDate: string,
+    id: number,
+    itemName: string,
+    quantity: number
+}
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class GrocerService {
-  
-  
-  constructor(private http : HttpClient, private authService : AuthService ) {
-    
+  updatePantry(originalPantryItems: Map<string,pantryItem>, pantryItems: pantryItem[]) {
+    pantryItems.forEach((item) =>{
+
+      let originalItem = originalPantryItems.get(item.itemName)
+
+      if(originalItem?.quantity != item.quantity){
+        this.http.put(environment.apiUrl + "/api/pantry/"+item.id, 
+          {
+            itemName: item.itemName,
+            quantity: item.quantity,
+            category: item.category,
+            expiryDate: item.expiryDate
+          }
+        ).subscribe()
+
+      }
+    })
+  }
+  getPantryItems(userId : string) {
+    return this.http.get(environment.apiUrl+ "/api/pantry/user/" + userId)
   }
 
 
@@ -86,4 +112,7 @@ export class GrocerService {
     this.http.delete(environment.apiUrl + "/api/items/"+id).subscribe(res => console.log(res))
   }  
 
+  constructor(private http : HttpClient, private authService : AuthService ) {
+    
+  }
 }

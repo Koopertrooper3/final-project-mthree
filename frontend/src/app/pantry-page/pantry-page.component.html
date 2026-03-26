@@ -1,0 +1,49 @@
+<div id="page-content" class="d-flex container-fluid h-100vh login-background p-0">
+    <app-navbar></app-navbar>
+    
+    <section id="main-content" class="d-flex flex-column p-5 w-100">
+        <div id="title-section">
+            <h1>Pantry</h1>
+            <small>See all your pantry items here</small>
+        </div>
+
+        <div class="pill-button bg-primary align-self-end py-1 me-3">
+            <a href="create" class="fs-6 nav-link text-white">Create</a>
+        </div>
+        <hr class="">
+
+        <div id="grocery-list">
+            <ul class="list-group">
+
+
+                @for (item of pantryItems; track $index) {
+                    <li class="list-group-item d-flex flex-row">
+                    <div id="grocery-list-name" class="mx-2 py-1">
+                       <a class="text-black nav-link mb-0 fs-6">{{item.itemName}}</a>
+                    </div>
+                    <div class="ms-3">
+                        <div class="pill-button bg-primary d-flex justify-content-center align-content-center text-nowrap mw-25 w-auto px-3 float-start mx-1 my-1">
+
+                        <p class="btn p-0 mb-0 text-white">
+                        {{item.category}}
+                        </p>
+                        </div>
+                    </div>
+                    <div class="grocery-list-buttons d-flex flex-row align-self-end w-auto ms-auto">
+                        <p class="m-0 mx-4 nav-link lh-lg">Quantity: {{item.quantity}}</p>
+                        <div class="bg-primary pill-button py-1">
+                            <button class="nav-link text-white fs-6" (click)="decreaseQuantity($index)">Decrease</button>
+                        </div>
+                        <div class="bg-primary pill-button ms-3">
+                            <button class="nav-link text-white fs-6" (click)="increaseQuantity($index)">Increaase</button>
+                        </div>
+                    </div>
+                  </li>
+                }
+                  
+
+            </ul>
+
+        </div>
+    </section>
+</div>
