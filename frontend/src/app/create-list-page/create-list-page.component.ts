@@ -38,7 +38,7 @@ export class CreateListPageComponent {
   }
 
   removeTagFromIngredient(ingredientIndex :number){
-    this.groceryList[ingredientIndex].tag = '';
+    this.groceryList[ingredientIndex].category = '';
   }
 
   removeIngredient(ingredientIndex: number) {
@@ -63,8 +63,8 @@ export class CreateListPageComponent {
       this.groceryList.push(
         {
           itemName: this.ingredientName?.value,
-          quantity: 0,
-          tag: this.currentIngredientTags.length > 0 ? this.currentIngredientTags[0] : ''
+          quantity: 1,
+          category: this.currentIngredientTags.length > 0 ? this.currentIngredientTags[0] : ''
         }
       )
       this.currentIngredientTags = []

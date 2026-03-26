@@ -81,11 +81,11 @@
                                                 </div>
                                                 } -->
                                                 
-                                                @if (ingredient.tag.length > 0) {
+                                                @if (ingredient.category.length > 0) {
                                                     <div class="pill-button bg-primary d-flex justify-content-center align-content-center text-nowrap mw-25 w-auto px-3 float-start mx-1 my-1">
 
                                                     <p class="btn p-0 mb-0 text-white">
-                                                    {{ingredient.tag}}
+                                                    {{ingredient.category}}
                                                     </p>
                                                     <button type="button" class="btn p-0 mb-0 text-white" (click)="removeTagFromIngredient(ingredientIndex)">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-x" viewBox="0 0 16 16">
@@ -102,6 +102,7 @@
                                                 <label for="ingredient-quantity" class="me-3">Quantity:</label>
                                                 <input type="text" inputmode="numeric" name="ingredient-quantity" id="ingredient-quantity" class="rounded-input ps-2" 
                                                 [placeholder]="ingredient.quantity"
+                                                [value]=`${ingredient.quantity}`
                                                 type="number"
                                                 (input)="changeQuantity($event,$index)">
 

@@ -6,9 +6,9 @@ import { AuthService } from './auth.service';
 import { lastValueFrom } from 'rxjs';
 
 export interface ingredient{
-  itemName: String
+  itemName: string
   quantity: number
-  tag: String
+  category: string
 }
 export interface groceryList{
   createdAt: any,
@@ -20,6 +20,7 @@ export interface groceryList{
   providedIn: 'root'
 })
 export class GrocerService {
+  
   
   constructor(private http : HttpClient, private authService : AuthService ) {
     
@@ -60,6 +61,29 @@ export class GrocerService {
   getGroceryListName(listId : string){
     return this.http.get(environment.apiUrl + "/api/lists/"+listId)
   }
-  
+
+  addGroceryIngredient(listId: string, item: ingredient) {
+    this.http.post(environment.apiUrl + "/api/items", {
+      itemName: item.itemName,
+      quantity: item.quantity,
+      category: item.category,
+      listId: listId
+    }).subscribe(res => console.log(res))
+  }
+
+  editGroceryListName(listId: string, newName : string) {
+    this.http.put(environment.apiUrl + "/api/lists/"+listId, {title : newName}).subscribe(res => console.log(res))
+  }
+  editGroceryIngredient(itemId: string, itemDetails : ingredient) {
+    this.http.put(environment.apiUrl + "/api/items/"+itemId, {
+      itemName: itemDetails.itemName,
+      quantity: itemDetails.quantity,
+      category: itemDetails.category ? itemDetails.category : ''
+    }).subscribe(res => console.log(res))
+  }
+
+  deleteGroceryIngredient(id: string) {
+    this.http.delete(environment.apiUrl + "/api/items/"+id).subscribe(res => console.log(res))
+  }  
 
 }

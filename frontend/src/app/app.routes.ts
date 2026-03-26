@@ -7,7 +7,11 @@ import { PlaceholderComponent } from './placeholder/placeholder.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 
 export const routes: Routes = [
-    
+    {
+        path: '',
+        redirectTo: '/login',
+        pathMatch: 'full'
+    },
     {
         path: 'login',
         component: LoginPageComponent,
