@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { GrocerService, pantryItem,  } from '../grocer.service';
 import { AuthService } from '../auth.service';
+import { RouterLink } from '@angular/router';
 
 
 
 @Component({
   selector: 'app-pantry-page',
   imports: [
-    NavbarComponent
+    NavbarComponent,
+    RouterLink
   ],
   templateUrl: './pantry-page.component.html',
   styleUrl: './pantry-page.component.css',

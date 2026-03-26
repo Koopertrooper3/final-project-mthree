@@ -40,8 +40,9 @@ export class GrocerService {
     pantryItems.forEach((item) =>{
 
       let originalItem = originalPantryItems.get(item.itemName)
-
-      if(originalItem?.quantity != item.quantity){
+      if(item.quantity == 0){
+        this.http.delete(environment.apiUrl + "/api/pantry/"+item.id).subscribe();
+      }else if(originalItem?.quantity != item.quantity){
         this.http.put(environment.apiUrl + "/api/pantry/"+item.id, 
           {
             itemName: item.itemName,
