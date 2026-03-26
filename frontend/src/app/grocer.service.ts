@@ -67,10 +67,7 @@ export class GrocerService {
       userId : this.authService.getUserID(),
       items: ingredientList
     }
-    this.http.post(environment.apiUrl + "/api/lists/full",body).subscribe((res)=>{
-      console.log(res)
-    })
-
+    return this.http.post(environment.apiUrl + "/api/lists/full",body)
   }
 
   deleteList(id: number) {

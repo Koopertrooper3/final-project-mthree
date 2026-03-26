@@ -26,7 +26,9 @@ export class PantryPageComponent {
     this.pantryItems[index].quantity += 1
   }
   decreaseQuantity(index: number) {
-    this.pantryItems[index].quantity -= 1
+    if(this.pantryItems[index].quantity > 0){
+      this.pantryItems[index].quantity -= 1
+    }
   }
 
   ngOnDestroy(){

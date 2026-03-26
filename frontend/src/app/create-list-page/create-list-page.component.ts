@@ -90,8 +90,8 @@ export class CreateListPageComponent {
   }
   onSubmit(){
 
-    this.grocer.submitList(this.listName.value,this.groceryList)
+    this.grocer.submitList(this.listName.value,this.groceryList).subscribe(() => this.router.navigateByUrl("/dashboard")
+)
 
-    this.router.navigateByUrl("/dashboard")
   }
 }
