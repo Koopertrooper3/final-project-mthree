@@ -30,6 +30,12 @@ export interface pantryItem {
 })
 
 export class GrocerService {
+  pushItemsToPantry(listId: string, userId: string) {
+    return this.http.post(environment.apiUrl + "/api/pantry/move-list", {
+      listId : listId,
+      userId : userId
+    })
+  }
   updatePantry(originalPantryItems: Map<string,pantryItem>, pantryItems: pantryItem[]) {
     pantryItems.forEach((item) =>{
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ingredient, GrocerService } from '../grocer.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class CreateListPageComponent {
     ingredientTag: new FormControl("")
   });
 
-  constructor(private grocer : GrocerService){
+  constructor(private grocer : GrocerService, private router : Router){
 
   }
 
@@ -88,9 +89,9 @@ export class CreateListPageComponent {
     this.groceryList[index].quantity = parseInt((event.target as HTMLInputElement).value)
   }
   onSubmit(){
-    console.log("submit works")
-    console.log(this.groceryList)
-    console.log(this.listName.value)
+
     this.grocer.submitList(this.listName.value,this.groceryList)
+
+    this.router.navigateByUrl("/dashboard")
   }
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { GrocerService, groceryList, ingredient } from '../grocer.service';
 import { NavbarComponent } from "../navbar/navbar.component";
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-view-list-page',
@@ -15,7 +15,13 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 })
 export class ViewListPageComponent {
   pushListToPantry() {
-    throw new Error('Method not implemented.');
+
+    let userId = this.auth.getUserID()
+    if(userId == null){
+      throw new Error("No userId defined")
+    }
+    this.grocer.pushItemsToPantry(this.listId,userId).subscribe()
+    this.router.navigateByUrl("/dashboard")
   }
 
 
@@ -24,11 +30,9 @@ export class ViewListPageComponent {
   listId: any;
   listName: string = "";
 
-  ngOnDestroy(){
-    //this.grocer.updatePantry(this.originalPantryItemsMap,this.pantryItems)
-  }
+  
 
-  constructor(private grocer : GrocerService, private route : ActivatedRoute){
+  constructor(private grocer : GrocerService, private route : ActivatedRoute, private auth : AuthService, private router : Router){
     
     this.listId = this.route.snapshot.paramMap.get('id')!;
     if(this.listId == null){
