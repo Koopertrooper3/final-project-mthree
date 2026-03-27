@@ -1,0 +1,4 @@
+#  docker run --name mysql-mthree-crud -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0-debian
+
+FROM mysql:8.0-debian
+ADD schema.sql /docker-entrypoint-initdb.d
