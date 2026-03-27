@@ -34,7 +34,7 @@
                 @if (firstPassword && firstPassword.invalid && (firstPassword.dirty || firstPassword.touched)) {
                     <div class="alert alert-danger my-2 h-auto p-2">
                     @if (firstPassword.hasError('required')) {
-                        <div>Email is required.</div>
+                        <div>Password is required.</div>
                     }
                     </div>
                 }
@@ -45,7 +45,7 @@
                 @if (secondPassword && secondPassword.invalid && (secondPassword.dirty || secondPassword.touched)) {
                     <div class="alert alert-danger my-2 h-auto p-2">
                     @if (secondPassword.hasError('required')) {
-                        <div>Email is required.</div>
+                        <div>Password is required.</div>
                     }
                     </div>
                     @if (secondPassword.hasError('passwordMismatch')) {
